@@ -10,12 +10,22 @@ package com.grab.partner.sdk.wrapper.deeplink
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
+import com.grab.partner.sdk.models.LoginSession
+import com.grab.partner.sdk.utils.Utility
+import com.grab.partner.sdk.wrapper.manager.GrabSdkManager
+import com.grab.partner.sdk.wrapper.manager.GrabSdkManagerImpl
+import com.grab.partner.sdk.wrapper.manager.SessionCallbacks
+import java.util.concurrent.ConcurrentHashMap
 import org.junit.After
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNull
 import org.junit.Assert.assertTrue
+import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
+import org.mockito.kotlin.argumentCaptor
+import org.mockito.kotlin.mock
+import org.mockito.kotlin.verify
 import org.robolectric.Robolectric
 import org.robolectric.RobolectricTestRunner
 import org.robolectric.android.controller.ActivityController
@@ -23,10 +33,28 @@ import org.robolectric.android.controller.ActivityController
 @RunWith(RobolectricTestRunner::class)
 class DeepLinkActivityTest {
     private var controller: ActivityController<DeepLinkActivity>? = null
+    private val sessionCallbacks: SessionCallbacks = mock()
+    private val sessions = ConcurrentHashMap<String, GrabSdkManager.Builder>()
+
+    @Before
+    fun setUp() {
+        sessions[STATE] = GrabSdkManager.Builder().apply {
+            listener = sessionCallbacks
+            exchangeRequired = false
+            loginSession = LoginSession()
+        }
+        GrabSdkManagerImpl.getInstance().apply {
+            utility = Utility()
+            sessions = this@DeepLinkActivityTest.sessions
+        }
+        setManagerInitialized(true)
+    }
 
     @After
     fun tearDown() {
         controller?.destroy()
+        sessions.clear()
+        setManagerInitialized(false)
     }
 
     @Test
@@ -47,6 +75,7 @@ class DeepLinkActivityTest {
         assertEquals(Intent.ACTION_VIEW, activity.intent.action)
         assertEquals(REDIRECT_URL, activity.intent.dataString)
         assertTrue(activity.isFinishing)
+        assertLoginCallbackReceivedCode()
     }
 
     @Test
@@ -71,6 +100,7 @@ class DeepLinkActivityTest {
         assertEquals(Intent.ACTION_VIEW, activity.intent.action)
         assertEquals(REDIRECT_URL, activity.intent.dataString)
         assertTrue(activity.isFinishing)
+        assertLoginCallbackReceivedCode()
     }
 
     private fun launch(intent: Intent): DeepLinkActivity {
@@ -78,6 +108,19 @@ class DeepLinkActivityTest {
         controller = activityController
         activityController.get().setTheme(androidx.appcompat.R.style.Theme_AppCompat)
         return activityController.create().get()
+    }
+
+    private fun assertLoginCallbackReceivedCode() {
+        val captor = argumentCaptor<LoginSession>()
+        verify(sessionCallbacks).onSuccess(captor.capture())
+        assertEquals(CODE, captor.firstValue.code)
+    }
+
+    private fun setManagerInitialized(initialized: Boolean) {
+        GrabSdkManagerImpl::class.java.getDeclaredField("initInvoked").apply {
+            isAccessible = true
+            setBoolean(null, initialized)
+        }
     }
 
     private fun intentWithAttackerExtras(action: String, data: Uri?): Intent =
@@ -88,6 +131,8 @@ class DeepLinkActivityTest {
         }
 
     private companion object {
-        const val REDIRECT_URL = "grabidsdk://open?code=CODE&state=STATE"
+        const val CODE = "CODE"
+        const val STATE = "STATE"
+        const val REDIRECT_URL = "grabidsdk://open?code=$CODE&state=$STATE"
     }
 }
