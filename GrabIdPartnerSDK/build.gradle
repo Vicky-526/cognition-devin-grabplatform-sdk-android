@@ -7,8 +7,7 @@
  */
 
 apply plugin: 'com.android.library'
-apply plugin: 'kotlin-android'
-apply plugin: 'kotlin-kapt'
+apply plugin: 'com.android.legacy-kapt'
 apply plugin: 'kotlin-parcelize'
 apply plugin: 'org.jetbrains.dokka'
 apply from: '../dependencies.gradle'
@@ -17,12 +16,16 @@ apply plugin: 'jacoco'
 android {
     namespace 'com.grab.partner.sdk'
 
-    compileSdkVersion androidCompileSdkVersion
-    buildToolsVersion androidBuildToolsVersion
+    compileSdk = androidCompileSdkVersion
+    buildToolsVersion = androidBuildToolsVersion
+
+    buildFeatures {
+        buildConfig = true
+    }
 
     defaultConfig {
-        minSdkVersion androidMinSdkVersion
-        targetSdkVersion androidTargetSdkVersion
+        minSdk = androidMinSdkVersion
+        targetSdk = androidTargetSdkVersion
         versionCode appVersion
         versionName appVersionName
 
@@ -35,15 +38,15 @@ android {
         targetCompatibility javaVersion
     }
 
-    kotlinOptions {
-        jvmTarget = "11"
-    }
-
     buildTypes {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
+    }
+
+    publishing {
+        singleVariant('release')
     }
 }
 
