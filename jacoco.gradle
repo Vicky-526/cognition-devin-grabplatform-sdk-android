@@ -51,7 +51,7 @@ task jacocoAdrTestReport(type: JacocoReport, dependsOn: 'testDebugUnitTest') {
     ]
 
 
-    def kotlinDebugTree = fileTree(dir: "${buildDir}/tmp/kotlin-classes/debug", excludes: jacocoFileFilter)
+    def kotlinDebugTree = fileTree(dir: provider { tasks.named("compileDebugKotlin").get().destinationDirectory.get() }, excludes: jacocoFileFilter)
     def mainSrc = "${project.projectDir}/src/main/java"
 
     sourceDirectories.from = files([mainSrc])

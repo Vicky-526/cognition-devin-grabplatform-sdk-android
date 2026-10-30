@@ -7,24 +7,23 @@
  */
 
 apply plugin: 'com.android.application'
-apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-parcelize'
 apply from: '../dependencies.gradle'
 
 android {
     namespace 'com.grab.partner.sdk.sampleappjava'
 
-    compileSdkVersion androidCompileSdkVersion
-    buildToolsVersion androidBuildToolsVersion
+    compileSdk = androidCompileSdkVersion
+    buildToolsVersion = androidBuildToolsVersion
 
-    dataBinding {
-        enabled = true
+    buildFeatures {
+        dataBinding = true
     }
 
     defaultConfig {
         applicationId "com.grab.partner.sdk.sampleappjava"
-        minSdkVersion androidMinSdkVersion
-        targetSdkVersion androidTargetSdkVersion
+        minSdk = androidMinSdkVersion
+        targetSdk = androidTargetSdkVersion
         versionCode 1
         versionName "1.0"
 

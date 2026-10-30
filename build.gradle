@@ -10,20 +10,21 @@ buildscript {
     apply from: 'dependencies.gradle'
     ext{
         android_plugin_version = '2.3.0'
-        dokka_version = '1.7.10'
-        publish_plugin_version = '1.1.0'
+        dokka_version = '2.2.0'
+        publish_plugin_version = '2.0.0'
         utCoveredLine = 0L
         utTotalLine = 0L
     }
     repositories {
         google()
-        jcenter()
+        mavenCentral()
         maven {
             url "https://plugins.gradle.org/m2/"
         }
     }
     dependencies {
         classpath "com.android.tools.build:gradle:$gradle_version"
+        classpath "com.android.tools.build:gradle-kotlin:$gradle_version"
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
         classpath "io.github.gradle-nexus:publish-plugin:$publish_plugin_version"
         classpath "com.github.dcendents:android-maven-gradle-plugin:$android_maven_gradle_plugin_version"
@@ -36,7 +37,7 @@ buildscript {
 allprojects {
     repositories {
         google()
-        jcenter()
+        mavenCentral()
         flatDir {
             dirs 'libs'
         }

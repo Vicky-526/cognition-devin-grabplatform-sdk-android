@@ -7,25 +7,24 @@
  */
 
 apply plugin: 'com.android.application'
-apply plugin: 'kotlin-android'
-apply plugin: 'kotlin-kapt'
+apply plugin: 'com.android.legacy-kapt'
 apply plugin: 'kotlin-parcelize'
 apply from: '../dependencies.gradle'
 
 android {
     namespace 'com.grab.partner.sdk.sampleapp'
 
-    compileSdkVersion androidCompileSdkVersion
-    buildToolsVersion androidBuildToolsVersion
+    compileSdk = androidCompileSdkVersion
+    buildToolsVersion = androidBuildToolsVersion
 
-    dataBinding {
-        enabled = true
+    buildFeatures {
+        dataBinding = true
     }
 
     defaultConfig {
         applicationId "com.grab.partner.sdk.sampleappkotlin"
-        minSdkVersion androidMinSdkVersion
-        targetSdkVersion androidTargetSdkVersion
+        minSdk = androidMinSdkVersion
+        targetSdk = androidTargetSdkVersion
         versionCode 1
         versionName "1.0"
 
@@ -36,10 +35,6 @@ android {
     compileOptions {
         sourceCompatibility javaVersion
         targetCompatibility javaVersion
-    }
-
-    kotlinOptions {
-        jvmTarget = "11"
     }
 
     buildTypes {

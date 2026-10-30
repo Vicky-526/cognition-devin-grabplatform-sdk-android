@@ -17,7 +17,7 @@ ext.printTotalCoverageFromXml = { String module, File jacocoTestReport ->
     }
 
     def coverageType = 'LINE'
-    def slurper = new XmlSlurper()
+    def slurper = new groovy.xml.XmlSlurper()
     slurper.setFeature('http://apache.org/xml/features/disallow-doctype-decl', false)
     slurper.setFeature('http://apache.org/xml/features/nonvalidating/load-external-dtd', false)
 
