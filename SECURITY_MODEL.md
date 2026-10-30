@@ -35,10 +35,10 @@ An Android library that partner apps embed to sign users in with their Grab acco
 
 ## Assets (all weighted equally — confirmed by the user)
 
-- Access token, refresh token, ID token (and the cached LoginSession) — highest sensitivity (account access to the partner's Grab-protected resources).
+- Access token, refresh token, ID token (and the cached LoginSession) — grant access to the user's Grab-protected resources.
 - Integrity of the login flow: authorization code, PKCE verifier, `state`, `nonce` — compromise ⇒ login CSRF / session fixation / code injection.
 - User PII in IdTokenInfo / user-info responses.
-- Partner config (client_id, redirect URI, scopes) — public, low sensitivity.
+- Partner config (client_id, redirect URI, scopes) — public values, but tampering redirects or broadens the login flow.
 
 ## Attacker profiles (all in scope — confirmed by the user)
 
