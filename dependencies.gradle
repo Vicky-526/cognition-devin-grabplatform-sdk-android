@@ -23,7 +23,7 @@ ext {
     espresso = '3.3.0-alpha02'
     mockito_kotlin_version = '5.4.0'
     retrofit_version = '2.9.0'
-    okhttplogging_version = '3.11.0'
+    okhttplogging_version = '3.14.9'
     dagger_version = '2.59.2'
     room_version = '1.1.0'
     room_rx_version = '2.1.0'
