@@ -18,7 +18,7 @@ ext {
     androidx_activity_version = '1.9.2'
     preference_version =  '1.2.0'
     constraintlayout_version = '2.0.1'
-    junit = 'junit:4.12'
+    junit = 'junit:4.13.2'
     testrunner = '1.1.0-alpha4'
     espresso = '3.3.0-alpha02'
     mockito_kotlin_version = '5.4.0'
@@ -32,6 +32,7 @@ ext {
     mpandroidchart_version = 'v3.1.0-alpha'
     rxandroid = '2.1.1'
     mockito_inline_version = '5.2.0'
+    robolectric_version = '4.16.1'
     test_runner_version = '1.0.2'
     leakcanary_version = '2.9.1'
     chrome_custom_tab_version = '1.3.0'
@@ -48,6 +49,7 @@ ext {
     testrunner = "com.android.support.test:runner:$test_runner_version"
     mockitokotlin = "org.mockito.kotlin:mockito-kotlin:$mockito_kotlin_version"
     mockitoinline = "org.mockito:mockito-inline:$mockito_inline_version"
+    robolectric = "org.robolectric:robolectric:$robolectric_version"
     // retrofit
     retrofit = "com.squareup.retrofit2:retrofit:$retrofit_version"
     retrofitrx = "com.squareup.retrofit2:adapter-rxjava2:$retrofit_version"
