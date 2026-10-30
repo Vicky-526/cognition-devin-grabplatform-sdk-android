@@ -8,6 +8,7 @@
 
 package com.grab.partner.sdk.sampleappkotlin.wrapper.di.modules
 
+import com.grab.partner.sdk.sampleappkotlin.wrapper.BuildConfig
 import dagger.Module
 import dagger.Provides
 import okhttp3.OkHttpClient
@@ -44,7 +45,12 @@ class NetworkModule {
     @Singleton
     fun provideLoggingInterceptor(): HttpLoggingInterceptor {
         val interceptor = HttpLoggingInterceptor()
+        interceptor.redactHeader("Authorization")
+        if (BuildConfig.DEBUG)
             interceptor.level = HttpLoggingInterceptor.Level.BODY
+        else
+            interceptor.level = HttpLoggingInterceptor.Level.NONE
+
         return interceptor
     }
 }
