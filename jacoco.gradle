@@ -51,27 +51,31 @@ task jacocoAdrTestReport(type: JacocoReport, dependsOn: 'testDebugUnitTest') {
     ]
 
 
-    def kotlinDebugTree = fileTree(dir: "${buildDir}/tmp/kotlin-classes/debug", excludes: jacocoFileFilter)
+    def kotlinDebugTree = provider {
+        fileTree(dir: tasks.named('compileDebugKotlin').get().destinationDirectory, excludes: jacocoFileFilter)
+    }
     def mainSrc = "${project.projectDir}/src/main/java"
 
     sourceDirectories.from = files([mainSrc])
     classDirectories.from = files([kotlinDebugTree])
-    executionData.from = files("${buildDir}/jacoco/testDebugUnitTest.exec")
+    executionData.from = layout.buildDirectory.file("jacoco/testDebugUnitTest.exec")
 
+    def moduleName = project.name
+    def root = project.rootProject
+    def coverageDir = root.file("build")
+    def coverageFile = root.file("build/temp_ut_coverage.txt")
     doLast {
-        def report = printReport(project.name, reports)
-        project.rootProject.utCoveredLine = project.rootProject.utCoveredLine.toLong() +
-                report.covered
-        project.rootProject.utTotalLine = project.rootProject.utTotalLine.toLong() + report.total
-        double ratio = rootProject.utCoveredLine.doubleValue() / rootProject.utTotalLine.
-                doubleValue() * 100
+        def report = printReport(moduleName, reports)
+        root.utCoveredLine = root.utCoveredLine.toLong() + report.covered
+        root.utTotalLine = root.utTotalLine.toLong() + report.total
+        double ratio = root.utCoveredLine.doubleValue() / root.utTotalLine.doubleValue() * 100
         def formatStr = '%.2f%%'
         def ratioStr = String.format(formatStr, ratio)
-        def dir = project.rootProject.file("build")
+        def dir = coverageDir
         if (!dir.exists()) {
             dir.mkdir()
         }
-        def file =  project.rootProject.file("build/temp_ut_coverage.txt")
+        def file = coverageFile
         if (!file.exists()) {
             file.createNewFile()
         }
@@ -122,28 +126,30 @@ task jacocoJarTestReport(type: JacocoReport, dependsOn: 'test') {
     ]
 
 
-    def kotlinDebugTree = fileTree(dir: "${buildDir}/classes/kotlin/main", excludes:
+    def kotlinDebugTree = fileTree(dir: layout.buildDirectory.dir("classes/kotlin/main"), excludes:
             jacocoFileFilter)
     def mainSrc = "${project.projectDir}/src/main/java"
 
     sourceDirectories.from = files([mainSrc])
     classDirectories.from = files([kotlinDebugTree])
-    executionData.from = files("${buildDir}/jacoco/test.exec")
+    executionData.from = layout.buildDirectory.file("jacoco/test.exec")
 
+    def moduleName = project.name
+    def root = project.rootProject
+    def coverageDir = root.file("build")
+    def coverageFile = root.file("build/temp_ut_coverage.txt")
     doLast {
-        def report = printReport(project.name, reports)
-        project.rootProject.utCoveredLine = project.rootProject.utCoveredLine.toLong() +
-                report.covered
-        project.rootProject.utTotalLine = project.rootProject.utTotalLine.toLong() + report.total
-        double ratio = rootProject.utCoveredLine.doubleValue() / rootProject.utTotalLine.
-                doubleValue() * 100
+        def report = printReport(moduleName, reports)
+        root.utCoveredLine = root.utCoveredLine.toLong() + report.covered
+        root.utTotalLine = root.utTotalLine.toLong() + report.total
+        double ratio = root.utCoveredLine.doubleValue() / root.utTotalLine.doubleValue() * 100
         def formatStr = '%.2f%%'
         def ratioStr = String.format(formatStr, ratio)
-        def dir = project.rootProject.file("build")
+        def dir = coverageDir
         if (!dir.exists()) {
             dir.mkdir()
         }
-        def file =  project.rootProject.file("build/temp_ut_coverage.txt")
+        def file = coverageFile
         if (!file.exists()) {
             file.createNewFile()
         }

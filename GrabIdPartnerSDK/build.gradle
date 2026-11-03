@@ -7,22 +7,21 @@
  */
 
 apply plugin: 'com.android.library'
-apply plugin: 'kotlin-android'
-apply plugin: 'kotlin-kapt'
+apply plugin: 'com.android.legacy-kapt'
 apply plugin: 'kotlin-parcelize'
 apply plugin: 'org.jetbrains.dokka'
 apply from: '../dependencies.gradle'
 apply plugin: 'jacoco'
 
 android {
-    namespace 'com.grab.partner.sdk'
+    namespace = 'com.grab.partner.sdk'
 
-    compileSdkVersion androidCompileSdkVersion
-    buildToolsVersion androidBuildToolsVersion
+    compileSdk = androidCompileSdkVersion
+    buildToolsVersion = androidBuildToolsVersion
 
     defaultConfig {
-        minSdkVersion androidMinSdkVersion
-        targetSdkVersion androidTargetSdkVersion
+        minSdk = androidMinSdkVersion
+        targetSdk = androidTargetSdkVersion
         versionCode appVersion
         versionName appVersionName
 
@@ -30,13 +29,13 @@ android {
 
     }
 
+    buildFeatures {
+        buildConfig = true
+    }
+
     compileOptions {
         sourceCompatibility javaVersion
         targetCompatibility javaVersion
-    }
-
-    kotlinOptions {
-        jvmTarget = "11"
     }
 
     buildTypes {
@@ -44,6 +43,9 @@ android {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
+    }
+    publishing {
+        singleVariant('release')
     }
 }
 
@@ -83,8 +85,10 @@ dependencies {
     implementation retrofit
     implementation retrofitrx
     implementation convertergson
+    implementation gson
 
     // rxandroid
+    implementation rxjava
     implementation rxandroid
     implementation rxkotlin
 
@@ -96,6 +100,7 @@ dependencies {
 
     // unit tests
     testImplementation junit
+    testImplementation mockitocore
     testImplementation mockitokotlin
 }
 
