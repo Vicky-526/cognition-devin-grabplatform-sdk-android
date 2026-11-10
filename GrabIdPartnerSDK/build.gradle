@@ -39,6 +39,10 @@ android {
         jvmTarget = "11"
     }
 
+    testOptions {
+        unitTests.includeAndroidResources = true
+    }
+
     buildTypes {
         release {
             minifyEnabled false
@@ -97,6 +101,8 @@ dependencies {
     // unit tests
     testImplementation junit
     testImplementation mockitokotlin
+    testImplementation robolectric
+    testImplementation androidxTestCore
 }
 
 //gradle file to publish the .aar
